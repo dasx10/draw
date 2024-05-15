@@ -1,0 +1,49 @@
+html, body, canvas {
+  margin     : 0;
+  padding    : 0;
+  width      : 100%;
+  height     : 100%;
+  overflow   : hidden;
+  text-align : center;
+}
+
+.container {
+  display      : block;
+  aspect-ratio : 1;
+  border       : 1px solid black;
+  max-width    : 100vmin;
+  max-height   : 100vmin;
+  margin       : auto;
+  position     : relative;
+}
+
+canvas {
+  display          : block;
+  aspect-ratio     : 1;
+  border           : 1px solid black;
+  max-width        : 100vmin;
+  max-height       : 100vmin;
+  margin           : auto;
+  image-rendering  : pixelated;
+  cursor           : crosshair;
+  background-color : transparent;
+}
+
+.tools {
+  display: inline-block;
+}
+
+#colors {
+  display: inline-block;
+}
+
+#temp {
+  /* display        : none; */
+  position       : absolute;
+  pointer-events : none;
+  z-index        : 2;
+  margin         : 0 auto;
+  left           : 0;
+  right          : 0;
+  bottom         : 0;
+}
