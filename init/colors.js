@@ -1,7 +1,8 @@
 globalThis.color = "#000";
-var initColor = () => {
+var initColor = (value) => {
   var color = document.createElement("input");
   color.type = "color";
+  color.value = value || "#000";
   return color
 }
 
@@ -9,9 +10,9 @@ var initColors = () => {
   var colorsFieldset = document.createElement("fieldset");
   colorsFieldset.id = "colors";
   var colors = [
-    initColor(),
-    initColor(),
-    initColor(),
+    initColor("#000000"),
+    initColor("#888888"),
+    initColor("#ffffff"),
   ];
 
   colors.forEach((node) => colorsFieldset.appendChild(node));

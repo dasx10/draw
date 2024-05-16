@@ -8,6 +8,9 @@ import initTools  from "./init/tools.js";
 import clear     from "./utils/clear.js";
 import drawLine  from "./utils/drawLine.js";
 import drawPixel from "./utils/drawPixel.js";
+import initBrushes from "./init/brushes.js";
+import initMove from "./init/move.js";
+import drawBrush from "./utils/drawBrush.js";
 
 var main = () => {
   var container = document.createElement("div");
@@ -15,8 +18,10 @@ var main = () => {
   var temp  = initCanvas(container);
   temp.id = "temp";
 
+  initMove();
   initColors();
   initTools();
+  var currentBrush = initBrushes();
 
   var layer  = initCanvas(container);
   var startX = 0;
@@ -43,25 +48,45 @@ var main = () => {
         drawPixel(x, y, color)(layer);
         break;
       }
+      case "brush": {
+        currentBrush(x, y, color)(layer);
+        break;
+      }
     }
   });
 
   layer.addEventListener("mousemove", (event) => {
     var isDown = mouse.size > 0;
+    var { x, y } = getMousePos(event);
     if (isDown) {
-      var { x, y } = getMousePos(event);
-      console.log(tool, startX, startY, x, y, color);
       switch (tool) {
         case "pencil": {
-          drawLine(startX, startY, x, y, color)(layer);
-          startX = x;
-          startY = y;
+          if (acceptMove) {
+            drawLine(startX, startY, x, y, color)(layer);
+            startX = x;
+            startY = y;
+          }
+          break;
+        }
+        case "brush": {
+          acceptMove && currentBrush(x, y, color)(layer);
           break;
         }
         case "line": {
-          temp.style.display = "block";
           clear(temp);
           drawLine(startX, startY, x, y, color)(temp);
+        }
+      }
+    } else {
+      clear(temp);
+      switch (tool) {
+        case "brush": {
+          currentBrush(x, y, color)(temp);
+          break;
+        }
+        default: {
+          drawPixel(x, y, color)(temp);
+          break;
         }
       }
     }
@@ -73,13 +98,16 @@ var main = () => {
       var { x, y } = getMousePos(event);
       switch (tool) {
         case "pencil": {
-          drawPixel(x, y, color)(layer);
+          acceptMove && drawPixel(x, y, color)(layer);
+          break;
+        }
+        case "brush": {
+          acceptMove && currentBrush(x, y, color)(layer);
           break;
         }
         case "line": {
           clear(temp);
           drawLine(startX, startY, x, y, color)(layer);
-          temp.style.display = "none";
         }
       }
     }

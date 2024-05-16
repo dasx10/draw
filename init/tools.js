@@ -14,6 +14,7 @@ var initTools = () => {
   var tools = [
     initTool("pencil"),
     initTool("line"),
+    initTool("brush")
   ];
 
   tools.forEach((node) => toolsFieldset.appendChild(node))

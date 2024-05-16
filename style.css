@@ -33,6 +33,10 @@ canvas {
   display: inline-block;
 }
 
+.tools:has(input[name="brush"]:not(:checked)) ~ #brushes {
+  display: none;
+}
+
 #colors {
   display: inline-block;
 }

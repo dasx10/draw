@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "browser-sync start --server --files '**/*.css, **/*.html, **/*.js' --browser 'chrome'"
+    "dev": "browser-sync start --server --files '**/*.css, **/*.html, **/*.js' --browser 'chrome' --port 9000"
   },
   "keywords": [],
   "author": "",
