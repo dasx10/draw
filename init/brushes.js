@@ -1,59 +1,31 @@
-import drawBigQuad         from "../utils/drawBigQuad.js";
-import drawBrush from "../utils/drawBrush.js";
-import drawChees           from "../utils/drawChees.js";
-import drawCross           from "../utils/drawCross.js";
-import drawHorizontalSpace from "../utils/drawHorizontalSpace.js";
-import drawQuad            from "../utils/drawQuad.js";
-import drawVerticalSpace   from "../utils/drawVerticalSpace.js";
+import shapes from "../shapes.js";
 
 globalThis.brush = "quad";
 
 var initBrush = (value) => {
   var brush = document.createElement("input");
+  var label = document.createElement("label");
+  label.textContent = value;
+  label.prepend(brush);
   brush.type = "radio";
   brush.name = "brush";
   brush.value = value;
   brush.title = value;
-  return brush
+  return label;
 }
 
 var initBrushes = () => {
-  var brushesFieldset = document.createElement("fieldset");
-  brushesFieldset.id = "brushes";
-  var brushesNodes = [
-    initBrush("quad"),
-    initBrush("bigQuad"),
-    initBrush("cross"),
-    initBrush("cheese"),
-    initBrush("horizontalSpace"),
-    initBrush("verticalSpace"),
-    initBrush("custom"),
-  ];
-
-  var brushes = [
-    drawQuad,
-    drawBigQuad,
-    drawCross,
-    drawChees,
-    drawVerticalSpace,
-    drawHorizontalSpace,
-    drawBrush([
-      [1, 0, 0, 0],
-      [1, 0, 0, 1],
-      [1, 0, 0, 0],
-      [1, 0, 0, 1],
-      [1, 0, 0, 0],
-    ]),
-  ];
+  var brushesFieldset = document.getElementById("brushes");
+  var brushesNodes    = shapes.map((shape) => initBrush(shape.name));
 
   brushesNodes.forEach((node) => brushesFieldset.appendChild(node));
 
-  var getBrushIndex = () => (brushesNodes.findIndex((radio) => radio.checked));
+  var name = () => {
+    var brush = brushesNodes.find((label) => label.childNodes[0].checked);
+    return brush ? brush.childNodes[0].value : shapes[0].name;
+  }
 
-  document.body.appendChild(brushesFieldset);
-
-  var currentBrush = (x, y, color) => (canvas) => brushes.at(getBrushIndex())(x, y, color)(canvas);
-  return currentBrush;
+  return name;
 };
 
 export default initBrushes;

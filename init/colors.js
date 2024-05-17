@@ -7,15 +7,14 @@ var initColor = (value) => {
 }
 
 var initColors = () => {
-  var colorsFieldset = document.createElement("fieldset");
-  colorsFieldset.id = "colors";
+  var colorsFieldset = document.getElementById("colors");
   var colors = [
-    initColor("#000000"),
     initColor("#888888"),
     initColor("#ffffff"),
   ];
 
   colors.forEach((node) => colorsFieldset.appendChild(node));
+  colors.unshift(colorsFieldset.children[0]);
 
   Object.defineProperty(globalThis, "color", {
     get() {
@@ -24,7 +23,6 @@ var initColors = () => {
     }
   });
 
-  document.body.appendChild(colorsFieldset);
   return colors;
 }
 

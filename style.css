@@ -1,53 +1,143 @@
-html, body, canvas {
-  margin     : 0;
-  padding    : 0;
-  width      : 100%;
-  height     : 100%;
-  overflow   : hidden;
-  text-align : center;
+html, body {
+  margin         : 0;
+  padding        : 0;
+  width          : 100%;
+  height         : 100%;
+  text-align     : center;
+  vertical-align : middle;
 }
 
-.container {
-  display      : block;
-  aspect-ratio : 1;
-  border       : 1px solid black;
-  max-width    : 100vmin;
-  max-height   : 100vmin;
-  margin       : auto;
-  position     : relative;
+body {
+  padding    : .25em;
+  box-sizing : border-box;
+  position   : relative;
 }
 
 canvas {
+  user-select      : none;
   display          : block;
   aspect-ratio     : 1;
-  border           : 1px solid black;
-  max-width        : 100vmin;
-  max-height       : 100vmin;
   margin           : auto;
   image-rendering  : pixelated;
   cursor           : crosshair;
   background-color : transparent;
+  width            : 100%;
+  height           : 100%;
 }
 
-.tools {
-  display: inline-block;
-}
-
-.tools:has(input[name="brush"]:not(:checked)) ~ #brushes {
-  display: none;
-}
-
-#colors {
-  display: inline-block;
-}
 
 #temp {
-  /* display        : none; */
   position       : absolute;
   pointer-events : none;
   z-index        : 2;
-  margin         : 0 auto;
   left           : 0;
   right          : 0;
   bottom         : 0;
+  top            : 0;
+  mix-blend-mode : difference;
+}
+
+#root {
+  user-select         : none;
+  display             : inline-block;
+  position            : sticky;
+  margin              : auto;
+  left                : 5em;
+  right               : 5em;
+  top                 : 5em;
+  bottom              : 5em;
+  min-width           : calc(100vmin - 10em);
+  min-height          : calc(100vmin - 10em);
+  aspect-ratio        : 1;
+  border              : 1px dashed black;
+  background-position : 0px 0px, 1em 1em;
+  background-size     : 2em 2em;
+  background-image    :
+    linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb 100%),
+    linear-gradient(45deg, #bbb 25%, white 25%, white 75%, #bbb 75%, #bbb 100%)
+  ;
+}
+
+#palete {
+  display: inline-flex;
+}
+
+#top, #left {
+  user-select     : none;
+  position        : sticky;
+  display         : flex;
+  gap             : 1em;
+  z-index         : 3;
+  box-sizing      : border-box;
+  display         : inline-flex;
+  overflow        : hidden;
+  justify-content : center;
+  border          : 1px solid rgba(128, 128, 128, .5);
+  top             : 0;
+  left            : 0;
+}
+
+#colors {
+  width : 5em;
+  height: 5em;
+}
+
+#top {
+  right           : 0;
+  flex-direction  : row;
+  justify-content : space-evenly;
+  width           : 100%;
+  max-width       : 100%;
+  margin-bottom   : .25em;
+  z-index         : 4;
+}
+
+#left {
+  padding-block  : 5em;
+  float          : left;
+  top            : 0;
+  bottom         : 0;
+  left           : 0;
+  position       : fixed;
+  flex-direction : column;
+  height         : 100%;
+  margin-right   : .25em;
+  max-width      : 5em;
+}
+
+#left > * {
+  display        : flex;
+  flex-direction : column;
+  text-align     : left;
+}
+
+button[style*="color"] {
+  width            : 1.5em;
+  height           : 1.5em;
+  background-color : currentColor;
+  text-wrap        : wrap;
+  overflow         : hidden;
+  border           : 1px solid rgba(128, 128, 128, .5);
+  border-radius    : .25em;
+  outline          : none;
+  cursor           : pointer;
+}
+
+button[style*="color"]:hover {
+  border    : 1px solid rgba(128, 128, 128, .75);
+  transform : scale(1.05);
+}
+
+#palete {
+  display        : inline-flex;
+  gap            : .125em;
+  flex-direction : column;
+  width          : 100%;
+}
+
+input[type="color"] {
+  width   : 2.5em;
+  height  : 2.5em;
+  border  : none;
+  padding : 0;
 }

@@ -9,10 +9,10 @@ var initTool = (value) => {
 }
 
 var initTools = () => {
-  var toolsFieldset = document.createElement("fieldset");
-  toolsFieldset.className = "tools";
+  var toolsFieldset = document.getElementById("tools");
   var tools = [
     initTool("pencil"),
+    initTool("eraser"),
     initTool("line"),
     initTool("brush")
   ];
@@ -25,7 +25,6 @@ var initTools = () => {
     }
   });
 
-  document.body.appendChild(toolsFieldset);
   return tools;
 };
 
