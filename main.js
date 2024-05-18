@@ -31,9 +31,10 @@ var main = () => {
   var currentBrushLineDraw = () => getBrushLine(brushName());
 
 
-  var layer  = initCanvas(root);
-  var startX = 0;
-  var startY = 0;
+  var layer    = initCanvas(root);
+  var startX   = 0;
+  var startY   = 0;
+  var isCancel = false;
 
   var getMousePos = (event) => {
     var rect  = layer.getBoundingClientRect();
@@ -50,87 +51,117 @@ var main = () => {
     var { x, y } = getMousePos(event);
     startX = x;
     startY = y;
-
-    switch (tool) {
-      case "pencil": {
-        drawPixel(x, y, color)(layer);
+    switch (mouse.size) {
+      case 0: {
         break;
       }
-      case "brush": {
-        currentBrushDraw()(x, y, color)(layer);
-        break;
+      case 1: {
+        switch (tool) {
+          case "brush": {
+            currentBrushDraw()(x, y, color)(temp);
+            return;
+          }
+          default: {
+            drawPixel(x, y, color)(temp);
+            return;
+          }
+        }
+      }
+      default: {
+        isCancel = true;
+        clear(temp);
+        return;
       }
     }
   });
 
   layer.addEventListener("mousemove", (event) => {
-    var isDown = mouse.size > 0;
     var { x, y } = getMousePos(event);
-    if (isDown) {
-      switch (tool) {
-        case "eraser": {
-          clear(temp);
-          drawPixel(x, y, "#888")(temp);
-          acceptMove && erase(x, y)(layer);
-          break;
-        }
-        case "pencil": {
-          clear(temp);
-          drawPixel(x, y, "#888")(temp);
-          if (acceptMove) {
-            drawLine(startX, startY, x, y, color)(layer);
-            startX = x;
-            startY = y;
+    switch (mouse.size) {
+      case 0: {
+        isCancel = false;
+        temp.style.mixBlendMode = "difference";
+        clear(temp);
+        switch (tool) {
+          case "brush": {
+            currentBrushDraw()(x, y, "#888")(temp);
+            return;
           }
-          break;
-        }
-        case "brush": {
-          clear(temp);
-          currentBrushDraw()(x, y, "#888")(temp);
-          if (acceptMove) {
-            currentBrushLineDraw()(startX, startY, x, y, color)(layer);
-            startX = x;
-            startY = y;
+          default: {
+            drawPixel(x, y, "#888")(temp);
+            return;
           }
-          break;
-        }
-        case "line": {
-          clear(temp);
-          drawLine(startX, startY, x, y, "#888")(temp);
         }
       }
-    } else {
-      clear(temp);
-      switch (tool) {
-        case "brush": {
-          currentBrushDraw()(x, y, "#888")(temp);
-          break;
+      case 1: {
+        if (isCancel) {
+          clear(temp);
+          return;
         }
-        default: {
-          drawPixel(x, y, "#888")(temp);
-          break;
+
+        switch (tool) {
+          case "eraser": {
+            temp.style.mixBlendMode = "normal";
+            drawPixel(x, y, "#888")(temp);
+            acceptMove && erase(x, y)(layer);
+            return;
+          }
+          case "pencil": {
+            if (acceptMove) {
+              temp.style.mixBlendMode = "normal";
+              drawLine(startX, startY, x, y, color)(temp);
+              startX = x;
+              startY = y;
+            }
+            return;
+          }
+          case "brush": {
+            if (acceptMove) {
+              temp.style.mixBlendMode = "normal";
+              currentBrushLineDraw()(startX, startY, x, y, color)(temp);
+              startX = x;
+              startY = y;
+            }
+            return;
+          }
+          case "line": {
+            temp.style.mixBlendMode = "difference";
+            clear(temp);
+            drawLine(startX, startY, x, y, "#888")(temp);
+            return;
+          }
         }
+        return;
+      }
+      default: {
+        isCancel = true;
+        clear(temp);
+        return;
       }
     }
   });
 
-  layer.addEventListener("mouseup", (event) => {
-    var isDown = mouse.size > 0;
-    if (isDown) {
-      var { x, y } = getMousePos(event);
-      switch (tool) {
-        case "pencil": {
-          acceptMove && drawPixel(x, y, color)(layer);
-          break;
+  document.addEventListener("mouseup", () => {
+    switch (mouse.size) {
+      case 0: {
+        isCancel = false;
+        return;
+      }
+      case 1: {
+        switch (tool) {
+          case "line": {
+            var { x, y } = getMousePos(event);
+            clear(temp);
+            drawLine(startX, startY, x, y, color)(temp);
+          }
         }
-        case "brush": {
-          acceptMove && currentBrushDraw()(x, y, color)(layer);
-          break;
-        }
-        case "line": {
-          clear(temp);
-          drawLine(startX, startY, x, y, color)(layer);
-        }
+        layer.getContext("2d")?.drawImage(temp, 0, 0);
+        clear(temp);
+        return;
+      }
+      default: {
+        clear(temp);
+        return;
       }
     }
   })
