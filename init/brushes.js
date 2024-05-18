@@ -1,4 +1,4 @@
-import shapes from "../shapes.js";
+import shapes from "../shapes/index.js";
 
 globalThis.brush = "quad";
 

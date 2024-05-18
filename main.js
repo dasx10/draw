@@ -6,6 +6,8 @@ import initCanvas from "./init/canvas.js";
 import initColors from "./init/colors.js";
 import initTools  from "./init/tools.js";
 
+import "./init/zoom.js";
+
 import clear        from "./utils/clear.js";
 import drawLine     from "./utils/drawLine.js";
 import drawPixel    from "./utils/drawPixel.js";

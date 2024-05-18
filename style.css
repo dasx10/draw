@@ -13,6 +13,25 @@ body {
   position   : relative;
 }
 
+#root {
+  user-select         : none;
+  display             : inline-block;
+  position            : sticky;
+  margin              : auto;
+  left                : 5em;
+  right               : 5em;
+  top                 : 5em;
+  bottom              : 5em;
+  aspect-ratio        : 1;
+  border              : 1px dashed black;
+  background-position : 0px 0px, 1em 1em;
+  background-size     : 2em 2em;
+  background-image    :
+    linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb 100%),
+    linear-gradient(45deg, #bbb 25%, white 25%, white 75%, #bbb 75%, #bbb 100%)
+  ;
+}
+
 canvas {
   user-select      : none;
   display          : block;
@@ -37,32 +56,12 @@ canvas {
   mix-blend-mode : difference;
 }
 
-#root {
-  user-select         : none;
-  display             : inline-block;
-  position            : sticky;
-  margin              : auto;
-  left                : 5em;
-  right               : 5em;
-  top                 : 5em;
-  bottom              : 5em;
-  min-width           : calc(100vmin - 10em);
-  min-height          : calc(100vmin - 10em);
-  aspect-ratio        : 1;
-  border              : 1px dashed black;
-  background-position : 0px 0px, 1em 1em;
-  background-size     : 2em 2em;
-  background-image    :
-    linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb 100%),
-    linear-gradient(45deg, #bbb 25%, white 25%, white 75%, #bbb 75%, #bbb 100%)
-  ;
-}
 
 #palete {
   display: inline-flex;
 }
 
-#top, #left {
+#top, #left, #bottom {
   user-select     : none;
   position        : sticky;
   display         : flex;
@@ -73,8 +72,6 @@ canvas {
   overflow        : hidden;
   justify-content : center;
   border          : 1px solid rgba(128, 128, 128, .5);
-  top             : 0;
-  left            : 0;
 }
 
 #colors {
@@ -83,6 +80,8 @@ canvas {
 }
 
 #top {
+  top             : 0;
+  left            : 0;
   right           : 0;
   flex-direction  : row;
   justify-content : space-evenly;
@@ -90,6 +89,14 @@ canvas {
   max-width       : 100%;
   margin-bottom   : .25em;
   z-index         : 4;
+}
+
+#bottom {
+  position : fixed;
+  bottom   : 0;
+  left     : 0;
+  right    : 0;
+  z-index  : 3;
 }
 
 #left {
