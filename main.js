@@ -80,6 +80,8 @@ var main = () => {
     switch (mouse.size) {
       case 0: {
         isCancel = false;
+        startX = x;
+        startY = y;
         temp.style.mixBlendMode = "difference";
         clear(temp);
         switch (tool) {
@@ -135,6 +137,8 @@ var main = () => {
       }
       default: {
         isCancel = true;
+        startX = x;
+        startY = y;
         clear(temp);
         return;
       }
@@ -142,15 +146,22 @@ var main = () => {
   });
 
   document.addEventListener("mouseup", () => {
+    var { x, y } = getMousePos(event);
     switch (mouse.size) {
       case 0: {
         isCancel = false;
+        startX   = x;
+        startY   = y;
         return;
       }
       case 1: {
+        if (isCancel) {
+          clear(temp);
+          return;
+        }
+
         switch (tool) {
           case "line": {
-            var { x, y } = getMousePos(event);
             clear(temp);
             drawLine(startX, startY, x, y, color)(temp);
           }
