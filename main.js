@@ -18,10 +18,10 @@ import erase        from "./utils/erase.js";
 import getBrush     from "./brushes/getBrush.js";
 import getBrushLine from "./brushes/getBrushLine.js";
 
+
 var main = () => {
   var root = document.getElementById("root");
-  var temp  = initCanvas(root);
-  temp.id = "temp";
+  var temp  = initCanvas("temp", root);
 
   initMove();
   initColors();
@@ -31,7 +31,7 @@ var main = () => {
   var currentBrushLineDraw = () => getBrushLine(brushName());
 
 
-  var layer    = initCanvas(root);
+  var layer    = initCanvas("layer", root);
   var startX   = 0;
   var startY   = 0;
   var isCancel = false;
@@ -45,9 +45,9 @@ var main = () => {
     });
   }
 
-  layer.oncontextmenu = (event) => event.preventDefault();
+  root.oncontextmenu = (event) => event.preventDefault();
 
-  layer.addEventListener("mousedown", (event) => {
+  root.addEventListener("mousedown", (event) => {
     var { x, y } = getMousePos(event);
     startX = x;
     startY = y;
@@ -104,8 +104,8 @@ var main = () => {
         switch (tool) {
           case "eraser": {
             temp.style.mixBlendMode = "normal";
-            drawPixel(x, y, "#888")(temp);
             acceptMove && erase(x, y)(layer);
+            clear(temp);
             return;
           }
           case "pencil": {
@@ -164,6 +164,10 @@ var main = () => {
           case "line": {
             clear(temp);
             drawLine(startX, startY, x, y, color)(temp);
+            break;
+          }
+          case "eraser": {
+            return;
           }
         }
         layer.getContext("2d")?.drawImage(temp, 0, 0);
@@ -179,3 +183,8 @@ var main = () => {
 };
 
 main();
+
+import("./init/save.js");
+import("./init/load.js");
+import("./init/clear.js");
+import("./init/create.js");
